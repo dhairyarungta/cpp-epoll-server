@@ -23,7 +23,30 @@ void Response::set_data(const std::String& data)
 
 void Response::prepare(bool keep_alive)
 {
+    std::ostringstream oss;
+    oss<<"HTTP/1.1"<<" "<<_status_code<<" "<<_status_message__LINE_SEP;
+    if(!_headers.count("Content-Type"))
+    {
+        oss<"Content-Type: application/json"<<LINE_SEP;
 
+    }
+    if(!_headers.count("Content-Length"))
+    {
+        oss<<"Content-Length: "<<_data.size()<<LINE_SEP;
+
+    }
+    oss<<"Connection: "<<(keep_alive?"Keep-Alive":"close")<<LINE_SEP;
+    
+
+    
+    for(auto& it: _headers)
+    {
+        os<<it.first<<": "<<it.second<<LINE_SEP;
+    }
+
+    oss<<LINE_SEP;
+    oss<<_data;
+    _response_string = os.str();
 }
 
 
