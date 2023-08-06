@@ -60,7 +60,7 @@ void EpollLoop::start()
             }else 
             {
                 std::<<cout <<"None in epoll event type\n";
-                
+
             }
         }
     }
