@@ -11,7 +11,7 @@ enum class HttpMethod :int
     OPTIONS = 0, 
     GET,
     POST, 
-    SIZE,
+    // SIZE,
 };
 
 static std::unordered_map<std::string,HttpMethod> method_to_enum{

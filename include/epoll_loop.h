@@ -6,7 +6,7 @@
 class EpollLoop
 {
 public :
-    static EpollLoop &Instance()
+    static EpollLoop& Instance()
     {
         static EpollLoop instance;
         return instance;

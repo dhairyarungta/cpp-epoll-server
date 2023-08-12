@@ -2,7 +2,7 @@
 
 #include "utils.h"
 #include "client_context.h"
-
+#include <iostream>
 
 class Request 
 {
@@ -53,4 +53,4 @@ protected :
 
 }
 
-std::ostream &operator<<(std::ostream &os, const Request &request);
+std::ostream& operator<<(std::ostream &os, const Request &request);
