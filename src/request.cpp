@@ -147,7 +147,7 @@ const void Request::parse_body(const std::string& body)
 
 std::ostream& operator<<(std::ostream&os, const Request &request) 
 {
-    os<<"METHOD :"<<request._method<<"\n";
+    os<<"METHOD :"<<request._method_string<<"\n";
     os<<"PATH :"<<request._url<<"\n";
     os<<"BODY"<<request._body<<"\n";
     os<<"CONTENT LENGTH"<<request._content_length<<"\n";
