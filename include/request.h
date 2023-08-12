@@ -51,6 +51,6 @@ public :
 protected :
     Request() = default;
 
-}
+};
 
 std::ostream& operator<<(std::ostream &os, const Request &request);
