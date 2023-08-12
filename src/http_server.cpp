@@ -49,7 +49,7 @@ void HttpServer::route_request(Request& request, Respons& response)
         response.set_data("Path='"+request.get_path()+"' not found.");
         return ;
     }
-    HttpServer resouce = _resouce_map[request.get_path()];
+    HttpResource resouce = _resouce_map[request.get_path()];
     if(!resouce.method_allowed(reqeust.get_method()))
     {
         response.set_status_code(405);
