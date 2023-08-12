@@ -14,7 +14,7 @@ private :
     std::string _response_message;
     int _status_code;
     bool _prepared;
-    friend std::ostream& operator<<(std::ostream&os ,const Response& response);
+    // friend std::ostream& operator<<(std::ostream&os ,const Response& response);
 
 protected:
     Response() = default;
