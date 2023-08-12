@@ -70,7 +70,9 @@ int main()
     index_resouce.add_handler(HttpMethod::GET,get_index);
     server.add_resouce("/", index_resouce);
 
-    
+    HttpResource dtl_resource;
+    dtl_resouce.add_handler(HttpMethod::GET,get_dtl);
+    server.add_resouce("/dtl", dtl_resource);
 
     server.start();
     return 0;
