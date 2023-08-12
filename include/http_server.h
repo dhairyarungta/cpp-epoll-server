@@ -40,9 +40,9 @@ public :
 
     void handle_read(epoll_event&)override;
     void handle_write(epoll_event&)override;
-    void handle_closed(const int fd)override;
+    void handle_close(const int fd)override;
     std::pair <int , std::string> handle_accept(epoll_event&)override;
-    void route_request(Request&, Respoinse&);
+    void route_request(Request&, Response&);
     void add_resource(const std::string& path, const HttpResource&);
 
 

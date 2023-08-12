@@ -11,7 +11,7 @@ sockaddr_in HttpServer::create_listening_addr()
     return ret;
 }
 
-HttpServer::HttpServer(int port) 
+HttpServer::HttpServer(int port = DEFAULT_PORT) 
     :_port (port), _epoll_loop(EpollLoop::Instance())
 {
     _tcp_fd =socket(AF_INET, SOCK_STREAM, 0);
@@ -70,7 +70,7 @@ void HttpServer::route_request(Request& request, Respons& response)
     }
 }
 
-void HttpServer::hanlde_write(epoll_event &event)
+void HttpServer::handle_write(epoll_event &event)
 {
     ClientContext *client_context = (ClientContext*)event.data.ptr;
     std::string response_string = client_context->get_response().get_response_string(
@@ -79,12 +79,12 @@ void HttpServer::hanlde_write(epoll_event &event)
     write (client_context->fd,response_string.data(), response_string.size());
 }
 
-void HttpServer::handle_close(const int fd)
+void HttpServer::handle_closed(const int fd)
 {
     close(fd);   
 }
 
-void HttpServer::add_resource(const std::string& path, sconst HttpResource& resource)
+void HttpServer::add_resource(const std::string& path, const HttpResource& resource)
 {
     _resource_map[path] = resource;
 }
