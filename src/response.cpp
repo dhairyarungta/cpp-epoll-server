@@ -1,8 +1,8 @@
 #include "../include/response.h"
-
-void Response::set_header(const std::string&key, const std::string&value);
+#include <sstream>
+void Response::set_header(const std::string&key, const std::string&value)
 {
-    _header[key] = value;
+    _headers[key] = value;
 }
 
 void Response::set_status_code(int status_code)
@@ -16,7 +16,7 @@ void Response::set_status_message(const std::string& status_message)
     _status_message = status_message;
 } 
 
-void Response::set_data(const std::String& data)
+void Response::set_data(const std::string& data)
 {
     _data = data;
 }
@@ -24,10 +24,10 @@ void Response::set_data(const std::String& data)
 void Response::prepare(bool keep_alive)
 {
     std::ostringstream oss;
-    oss<<"HTTP/1.1"<<" "<<_status_code<<" "<<_status_message__LINE_SEP;
+    oss<<"HTTP/1.1"<<" "<<_status_code<<" "<<_status_message<<LINE_SEP;
     if(!_headers.count("Content-Type"))
     {
-        oss<"Content-Type: application/json"<<LINE_SEP;
+        oss<<"Content-Type: application/json"<<LINE_SEP;
 
     }
     if(!_headers.count("Content-Length"))
@@ -41,12 +41,12 @@ void Response::prepare(bool keep_alive)
     
     for(auto& it: _headers)
     {
-        os<<it.first<<": "<<it.second<<LINE_SEP;
+        oss<<it.first<<": "<<it.second<<LINE_SEP;
     }
 
     oss<<LINE_SEP;
     oss<<_data;
-    _response_string = os.str();
+    _response_message = oss.str();
 }
 
 
@@ -57,5 +57,5 @@ std::string& Response::get_response_string(bool keep_alive)
         prepare(keep_alive);
         _prepared = true;
     }
-    return _response_string;
+    return _response_message;
 }
