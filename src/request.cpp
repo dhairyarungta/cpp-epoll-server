@@ -75,7 +75,6 @@ const void Request::parse_headers(const std::string& headers)
 const void Request::set_special_headers()
 {
     _keep_alive = _headers.count("Connection")&&_headers["Connection"] =="Keep-Alive";
-
     _content_type = _headers["Content-Type"] ;
     _content_length = _headers.count("Content-Length")?std::stoi(_headers["Content-Length"]):0;
 
@@ -84,7 +83,7 @@ const void Request::set_special_headers()
 
 const void Request::parse_request_line(const std::string& request_line)
 {
-    size_t pos_method_end =request_line.find("");
+    size_t pos_method_end =request_line.find(" ");
     size_t pos_path_end = request_line.find(" ",pos_method_end+1);
     size_t pose_protocol_end = request_line.find(" ",pos_path_end+1);
     _method_string= request_line.substr(0,pos_path_end);
