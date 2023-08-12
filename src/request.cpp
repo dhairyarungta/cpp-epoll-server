@@ -1,4 +1,6 @@
 #include "../include/request.h"
+#include <sstream>
+// #include <nlohmann/json.hpp>
 
 const SSMap& Request::get_url_params(){return _url_params;}
 
@@ -39,15 +41,16 @@ void Request::parse_request(const std::string &raw)
     parse_headers(headers);
     if(_method==HttpMethod::POST)
     {
-        size_t pos_body_start = pos_header_end + (LINE_SEP+LINE_SEP).size();
+        size_t pos_body_start = pos_headers_end + (LINE_SEP+LINE_SEP).size();
         size_t  body_lenght = raw.size()-pos_body_start+1;
         if(_content_length<body_lenght)
         {
-            cerr<<"Request Legnth error\n";
+            std::cerr<<"Request Legnth error\n";
         }
+        parse_body(raw.substr(pos_body_start,_content_length));
     }
 
-    parse_body(raw.substr(pos_body_start,_content_length));
+    
 }
 
 
@@ -60,7 +63,7 @@ const void Request::parse_headers(const std::string& headers)
         cur = headers.find(LINE_SEP, prev);
         size_t pos_sep = headers.find(":", prev);
         std::string key = trim(headers.substr(prev, pos_sep-prev));
-        std::string value= trim(header.substr(pos_sep+1, cur-pos_sep-1));
+        std::string value= trim(headers.substr(pos_sep+1, cur-pos_sep-1));
         _headers.emplace(std::move(key), std::move(value));
         prev = cur+1;
 
@@ -79,28 +82,28 @@ const void Request::set_special_headers()
 }
 
 
-const Request::parse_request_line(const std::string& request_line)
+const void Request::parse_request_line(const std::string& request_line)
 {
     size_t pos_method_end =request_line.find("");
-    size_t pos_path_end = reqeust_line.find(" ",pos_method_end+1);
-    size_t pose_protocol_end = reqeust_line.find(" ",pos_path_end+1);
-    _method_string= reqeust_line.substr(0,pos_path_end);
+    size_t pos_path_end = request_line.find(" ",pos_method_end+1);
+    size_t pose_protocol_end = request_line.find(" ",pos_path_end+1);
+    _method_string= request_line.substr(0,pos_path_end);
 
     if(!method_to_enum.count(_method_string))
     {
-        cerr<"Log error in parse request line\n";
+       std::cerr<<"Log error in parse request line\n";
     }
 
     _method = method_to_enum[_method_string];
-    _url = request_Line.substr(pos_method_end+1,
+    _url = request_line.substr(pos_method_end+1,
             pos_path_end-pos_method_end-1);
 
     std::string protocol = request_line.substr(pos_path_end+1,request_line.size()-pos_path_end-1);
     if(protocol!="HTTP/1.1")
     {
-        cerr<<"Wrong HTTP version\n";
+        std::cerr<<"Wrong HTTP version\n";
     }
-    size_t url_params_start = url.find("?");
+    size_t url_params_start = _url.find("?");
     _path = _url.substr(0, url_params_start);
     if(url_params_start==std::string::npos)
     {
@@ -116,7 +119,7 @@ const Request::parse_request_line(const std::string& request_line)
     {
         size_t pos_sep =kvpair.find("=");
         std::string key = kvpair.substr(0, pos_sep);
-        std::string value = kvpair,substr(pos_sep+1);
+        std::string value = kvpair.substr(pos_sep+1);
         _url_params[key]= value;
         
     }
@@ -134,7 +137,7 @@ const void Request::parse_body(const std::string& body)
             _data[it.key()]= it.value();
         }
     }
-    catch(json::parse_error&e)
+    catch(json::parse_error &e)
     {
         std::cerr << "Error parsing JSON body on POST request \n";
         return;
@@ -142,12 +145,12 @@ const void Request::parse_body(const std::string& body)
     
 }
 
-std::ostream& operator<<(std::ostream&os, const Reqeust &request) 
+std::ostream& operator<<(std::ostream&os, const Request &request) 
 {
-    os<<"METHOD :"<<request._method()<<"\n";
+    os<<"METHOD :"<<request._method<<"\n";
     os<<"PATH :"<<request._url<<"\n";
-    os<<"BODY"<<request._body()<<"\n";
-    os<<"CONTENT LENGTH"<<request._content_length()<<"\n";
+    os<<"BODY"<<request._body<<"\n";
+    os<<"CONTENT LENGTH"<<request._content_length<<"\n";
     os<<"CONTENT_TYPE"<<request._content_type;
     return os;
 

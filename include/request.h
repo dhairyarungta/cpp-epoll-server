@@ -3,11 +3,13 @@
 #include "utils.h"
 #include "client_context.h"
 #include <iostream>
+include <nlohmann/json.hpp>
+
 
 class Request 
 {
     friend class ClientContext;
-    friend std::ostream& operator<<(std::ostream&, const Request&);
+    friend std::ostream &operator<<(std::ostream&, const Request&);
 
 private :
     HttpMethod _method;
@@ -53,4 +55,4 @@ protected :
 
 };
 
-std::ostream& operator<<(std::ostream &os, const Request &request);
+std::ostream &operator<<(std::ostream &os, const Request &request);
