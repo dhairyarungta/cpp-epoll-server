@@ -13,7 +13,7 @@ public :
     }
 
     void set_tcp_fd(const int fd);
-    void setnonblocking(const int fd);
+    void setnonblocking(const int& fd);
     void start();
     Handler * handler;
 

@@ -10,7 +10,7 @@ EpollLoop::EpollLoop()
     }
 }
 
-void EpollLoop::setnonblocking (const int & fd)
+void EpollLoop::setnonblocking (const int&  fd)
 {
     int old_flags= fcntl(fd, F_GETFL, 0);
     fcntl(fd,F_SETFL, old_flags | O_NONBLOCK);
@@ -43,7 +43,8 @@ void EpollLoop::start()
                 setnonblocking(client_fd);
                 epoll_event nevent;
                 nevent.events = EPOLLIN|EPOLLET;
-                epoll_ctl(_epfd, EPOLL_CTL_MOD,(()))
+                nevent.data.ptr= new ClientContext(client_fd, client_ip);
+                epoll_ctl(_epfd, EPOLL_CTL_ADD, client_fd, &nevent);
 
             }else if(event.events & EPOLLIN)
             {
