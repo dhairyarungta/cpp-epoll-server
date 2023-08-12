@@ -79,7 +79,7 @@ void HttpServer::handle_write(epoll_event &event)
     write (client_context->fd,response_string.data(), response_string.size());
 }
 
-void HttpServer::handle_closed(const int fd)
+void HttpServer::handle_close(const int fd)
 {
     close(fd);   
 }
@@ -104,16 +104,3 @@ void HttpResource::method_allowed(HttpMethod method)
     return (_method_to_handler.count(method) !=0);
 
 }
-
-
-void HttpServer::handle_write(epoll_event & event) 
-{
-    ClientContext* client_context = (ClientContext*)event.data.ptr;
-    std::string response_string = 
-        client_context->get_response().get_response_string(client_context->get_request().is_keep_alive());
-
-    write (client_context->fd, response_string.data(), response_string.size()); //
-
-}
-
-
