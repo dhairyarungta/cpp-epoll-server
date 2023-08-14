@@ -10,7 +10,7 @@ EpollLoop::EpollLoop()
     }
 }
 
-void EpollLoop::setnonblocking (const int&  fd)
+void EpollLoop::setnonblocking (const int  fd)
 {
     int old_flags= fcntl(fd, F_GETFL, 0);
     fcntl(fd,F_SETFL, old_flags | O_NONBLOCK);
